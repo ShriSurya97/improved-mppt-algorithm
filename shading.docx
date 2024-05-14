@@ -1,0 +1,91 @@
+#include <Arduino.h>
+
+int PWMPin = 9; //PWM Connect to pin 9
+int changeD = 12.7; //change duty by 5%
+int duty_cycle = 127.0; //start pwm with 50% duty cycle
+float Vm;
+float P;
+float prev_P = 0;
+float prev_V;
+int sum = 0;
+float voltage = 0.0;
+
+void setup()
+{
+	//TCCR2B = TCCR2B & B11111000 | B00000001; //change the pwm pin
+	//frequency to 31.372 kHz
+	Serial.begin(9600);
+}
+
+void loop()
+{
+	analogWrite(PWMPin, duty_cycle);
+	Serial.print(duty_cycle);
+	Serial.println("Duty Cycle");
+	sum = analogRead(A1); //read the input on analog pin A1
+	voltage = ((float)sum * 5.0) / 1023.0; //convert the analog reading
+	//to a voltage
+	sum = 0;
+	float prev_V = voltage * 7.33; //multiply the voltage divider ratio
+	Serial.print("prev_V ");
+	Serial.println (prev_V); //print out the voltage
+	float prev_I = (voltage * 7.33) / 10.5; //divide voltage by load
+	//resistor to get current value
+	Serial.print("prev_I ");
+	Serial.println (prev_I);
+	P_and_O(prev_V, prev_I);
+	Serial.print(P);
+	Serial.println("Watt");
+	Serial.println(" ");
+	delay(1000);
+}
+float P_and_O(float V, float I) {
+	P = V * I;
+	float changeP = P - prev_P;
+	float changeV = V - prev_V;
+	if (changeP != 0) {
+		if (changeP > 0) {
+			if (changeV > 0) {
+				if (0 <= duty_cycle && duty_cycle < 241.3) {
+					duty_cycle = duty_cycle + changeD;
+				}
+				else {
+					duty_cycle = 254;
+				}
+			}
+			else {
+				if (0 <= duty_cycle && duty_cycle < 255) {
+					duty_cycle = duty_cycle - changeD;
+				}
+				else {
+					duty_cycle = 241.3;
+				}
+			}
+		}
+		else {
+			if (changeV > 0) {
+				if (0 <= duty_cycle && duty_cycle < 255) {
+					duty_cycle = duty_cycle - changeD;
+				}
+				else {
+					duty_cycle = 241.3;
+				}
+			}
+			else {
+				if (0 <= duty_cycle && duty_cycle < 241.3) {
+					duty_cycle = duty_cycle + changeD;
+				}
+				else {
+					duty_cycle = 254;
+				}
+			}
+		}
+	}
+	else {
+		duty_cycle = duty_cycle;
+	}
+	prev_V = V;
+	prev_P = P;
+	return P;
+}
+
