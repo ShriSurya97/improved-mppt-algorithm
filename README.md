@@ -1,13 +1,4 @@
 # improved-mppt-algorithm
-Simulate different algorithms under different radiation patterns.
-Simulate shading effect impact on power output. 
-Develop an algorithm to extract maximum possible power even in shaded conditions.
-Construct a hardware model to test the effectiveness of the modified algorithm in comparison with the classic algorithm! 
-OBJECTIVES:
-Make use of green energy - solar energy
-Environment-friendly alternative
-Pollution free option
-Reduce the burden on the utility grid
-To develop an MPPT algorithm for solar panels
-Development and implementation of hardware model
+The project aims to study the maximum power point tracker (MPPT) solar charge controller. We aim to build a MATLAB(Simulink) model to track the maximum possible power point of the solar photovoltaic module and hence extract the maximum possible power from the photovoltaic system.  We experimented with simulations using MATLAB(Simulink) on various MPPT algorithms like perturb and observe (P&O) algorithm, modified perturb and observe (P&O) algorithm, fractional short circuit (FSCC) algorithm, and incremental conductance (IC) algorithm to observe and analyze the best suitable algorithm for the solar charge controller. 
+We took up the challenge of incorporating the problem of the shading effect in the solar PV panel by conducting an analysis of various methods for extraction of maximum possible power during the shading effect and thereby modifying the existing incremental conductance algorithm.
 
